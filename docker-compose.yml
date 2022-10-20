@@ -1,0 +1,29 @@
+volumes:
+  data:
+
+services:
+  redis:
+    image: redis:latest
+    volumes:
+      - data:/data
+    ports:
+      - 6379:6379
+    networks:
+      - spring-cloud-network
+
+
+  tic-tac-toe-game:
+    image: tic-tac-toe-game:latest
+    container_name: tic-tac-toe-game
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - spring-cloud-network
+    depends_on: [redis]
+
+networks:
+  spring-cloud-network:
+    driver: bridge
